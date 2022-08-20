@@ -15,9 +15,11 @@
 		"jsx": "react",
 		"incremental": true,
 		"allowSyntheticDefaultImports": true,
-		"noFallthroughCasesInSwitch": true
+		"noFallthroughCasesInSwitch": true,
+		"baseUrl": "src"
 	},
 	"include": [
+		"src",
 		"next-env.d.ts",
 		"**/*.ts",
 		"**/*.tsx",

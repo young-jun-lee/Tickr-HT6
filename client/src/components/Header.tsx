@@ -1,11 +1,11 @@
 import React from 'react';
-import './Header.css';
+import 'styles/Header.css';
 import PersonIcon from '@material-ui/icons/Person';
 import { IconButton } from '@material-ui/core';
 import ForumIcon from '@material-ui/icons/Forum';
 import { Link, useHistory } from 'react-router-dom';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
-import TickrLogo from './media/tickr_logo.png';
+import TickrLogo from 'media/tickr_logo.png';
 
 function Header({ backButton }) {
 	const history = useHistory();
