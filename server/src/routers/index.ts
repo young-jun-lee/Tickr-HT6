@@ -3,8 +3,13 @@ const router = express.Router();
 const finnhub = require('finnhub');
 import { supabase, signUp } from './supabase';
 
+<<<<<<< HEAD
 const api_key = finnhub.ApiClient.instance.authentications['api_key'];
 api_key.apiKey = process.env.FINNHUB_API_KEY;
+=======
+const api_key = finnhub.ApiClient.instance.authentications["api_key"];
+api_key.apiKey = process.env.API_KEY;
+>>>>>>> 68dc349af3abae342b5afdf3c4dfce77e04b5926
 const finnhubClient = new finnhub.DefaultApi();
 
 router.route('/').get((_req, res) => {
@@ -15,13 +20,30 @@ router.get('/companyProfile', (req, res) => {
 	const { symbol } = req.query;
 	try {
 		finnhubClient.companyProfile2(
-			{ symbol: symbol },
-			(error, data, response) => {
-				console.log(data);
+			{ symbol },
+			(_error: any, data: any, _response: any) => {
+				const {
+					country,
+					ipo,
+					logo,
+					marketCapitalization,
+					name,
+					ticker,
+					finnhubIndustry,
+				} = data;
+				res.json({
+					country,
+					ipo,
+					logoUrl: logo,
+					marketCap: marketCapitalization,
+					name,
+					ticker,
+					sector: finnhubIndustry,
+					dateFetched: new Date().toISOString().slice(0, 10),
+				});
+				// console.log(data);
 			}
 		);
-
-		res.json({ symbol });
 	} catch (error) {
 		throw new Error('nah');
 	}
