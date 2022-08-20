@@ -1,28 +1,35 @@
-.tinderCards__card {
-  position: relative;
-  width: 600px;
-  padding: 20px;
-  max-width: 85vw;
-  height: 50vh;
-  box-shadow: 0px 18px 53px 0px rgba(0, 0, 0, 0.3);
-  border-radius: 20px;
-  background-size: cover;
-  background-position: center;
+.tinderCards{
+	
+	background-color: red;
+	width: 100%;
+	height: 100px;
 }
 
 .tinderCards__cardContainer {
-  display: flex;
-  justify-content: center;
-  margin-top: 7vh;
+	display: flex;
+	justify-content: center;
+	margin-top: 7vh;
+	background-color: blue;
+}
+
+.tinderCards__card {
+	position: relative;
+	width: 600px;
+	padding: 20px;
+	max-width: 85vw;
+	height: 50vh;
+	box-shadow: 0px 18px 53px 0px rgba(0, 0, 0, 0.3);
+	border-radius: 20px;
+	background-size: cover;
+	background-position: center;
 }
 
 .tinderCards__swipe {
-  position: absolute;
+	position: absolute;
 }
 
 .tinderCards__card > h3 {
-  position: absolute;
-  bottom: 10px;
-  margin: 10px;
-  color: #fff;
+	position: absolute;
+	bottom: 10px;
+	margin: 10px;
 }

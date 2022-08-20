@@ -7,13 +7,6 @@ const supabase = createClient(
 	"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx4ZmFmc2NnbW1peW9nbHp1cXljIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NjEwMTU5OTQsImV4cCI6MTk3NjU5MTk5NH0.bBeYEtGj73EgYnieWDQ60Ciso7Cwk_8_CQVhke7x4ao"
 );
 
-function signUpWithEmail(email: string, password: string) {
-	return supabase.auth.signUp({
-		email: email,
-		password: password,
-	});
-}
-
 const getTickers = async (req: Request, res: Response) => {
 	try {
 		// returns a list of 20 random tickers from our static stock database
@@ -37,11 +30,37 @@ const signUp = async (req: Request, res: Response) => {
 		});
 		if (error) throw error;
 
-		res.status(200).send();
-	} catch (error) {
-		console.error(error);
-		res.status(500).send();
+		if (error) {
+			res.status(error.status).send(error.message);
+		}
+
+		res.json({ user, session, error }).send();
+	} catch (err) {
+		console.error(err);
+		res.status(400).send();
 	}
 };
 
-export { supabase, signUp, signUpWithEmail, getTickers };
+const signIn = async (req: Request, res: Response) => {
+	try {
+		const { email, password } = req.query;
+		console.log(email, password);
+
+		const { user, session, error } = await supabase.auth.signIn({
+			email: email,
+			password: password,
+		});
+
+		if (error) {
+			res.status(error.status).send(error.message);
+		}
+
+		console.log(user, session, error);
+		res.json({ session }).send();
+	} catch (err) {
+		console.error(err);
+		res.status(400).send();
+	}
+};
+
+export { signIn, signUp, getTickers };

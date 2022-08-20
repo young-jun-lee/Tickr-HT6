@@ -12,6 +12,7 @@ router.get("/tickers", getTickers);
 
 router.get("/companyProfiles", getCompanyProfile);
 
-router.post("/signUp", signUp);
+router.post('/signUp', signUp);
+router.post('/signIn', signIn);
 
 module.exports = router;
