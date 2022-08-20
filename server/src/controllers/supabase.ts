@@ -1,5 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
-import { randomUUID } from "crypto";
+import { Request, Response } from "express";
 
 // Create a single supabase client for interacting with your database
 const supabase = createClient(
@@ -14,18 +14,19 @@ function signUpWithEmail(email: string, password: string) {
 	});
 }
 
-const getTickers = async (req, res) => {
+const getTickers = async (req: Request, res: Response) => {
 	try {
+		// returns a list of 20 random tickers from our static stock database
 		const { data, error } = await supabase.rpc("get_tickers");
 		if (error) throw error;
-		console.log(data);
 		res.json({ data }).send();
+		res.redirect(`${process.env.clientURL}/companyProfiles`);
 	} catch (err) {
 		console.error(err);
 	}
 };
 
-const signUp = async (req, res) => {
+const signUp = async (req: Request, res: Response) => {
 	try {
 		const { email, password } = req.body;
 		console.log(email);
