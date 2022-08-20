@@ -1,15 +1,10 @@
 import express from 'express';
 const router = express.Router();
 const finnhub = require('finnhub');
-import { supabase, signUp } from './supabase';
+import { signIn, signUp } from './supabase';
 
-<<<<<<< HEAD
 const api_key = finnhub.ApiClient.instance.authentications['api_key'];
-api_key.apiKey = process.env.FINNHUB_API_KEY;
-=======
-const api_key = finnhub.ApiClient.instance.authentications["api_key"];
 api_key.apiKey = process.env.API_KEY;
->>>>>>> 68dc349af3abae342b5afdf3c4dfce77e04b5926
 const finnhubClient = new finnhub.DefaultApi();
 
 router.route('/').get((_req, res) => {
@@ -29,7 +24,7 @@ router.get('/companyProfile', (req, res) => {
 					marketCapitalization,
 					name,
 					ticker,
-					finnhubIndustry,
+					finnhubIndustry
 				} = data;
 				res.json({
 					country,
@@ -39,7 +34,7 @@ router.get('/companyProfile', (req, res) => {
 					name,
 					ticker,
 					sector: finnhubIndustry,
-					dateFetched: new Date().toISOString().slice(0, 10),
+					dateFetched: new Date().toISOString().slice(0, 10)
 				});
 				// console.log(data);
 			}
@@ -49,23 +44,7 @@ router.get('/companyProfile', (req, res) => {
 	}
 });
 
-router.post('/signUp', async (req, res) => {
-	res.status(200);
-	try {
-		const { email, password } = req.body;
-
-		const { user, session, error } = await supabase.auth.signUp({
-			email: email,
-			password: password
-		});
-
-		console.log(user, session, error);
-
-		res.status(200);
-	} catch (err) {
-		console.error(err);
-		res.status(500).send();
-	}
-});
+router.post('/signUp', signUp);
+router.post('/signIn', signIn);
 
 module.exports = router;

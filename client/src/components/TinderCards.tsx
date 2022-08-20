@@ -1,25 +1,26 @@
-import React, { useEffect, useState } from "react";
-import TinderCard from "react-tinder-card";
-import database from "../firebase";
-import "styles/TinderCards.css";
+import React, { useEffect, useState } from 'react';
+import TinderCard from 'react-tinder-card';
+import database from '../firebase';
+import 'styles/TinderCards.css';
+import TickrLogo from 'media/tickr_logo.png';
 
 function TinderCards() {
 	const [people, setPeople] = useState([]);
 
 	useEffect(() => {
 		database
-			.collection("people")
+			.collection('people')
 			.onSnapshot((snapshot) =>
 				setPeople(snapshot.docs.map((doc) => doc.data()))
 			);
 	}, []);
 
-	const swiped = (direction, nameToDelete) => {
-		console.log("removing:" + nameToDelete);
+	const swiped = (direction, nameToDelete: string) => {
+		console.log('removing:' + nameToDelete);
 	};
 
 	const outOfFrame = (name) => {
-		console.log(name + " left the screen!");
+		console.log(name + ' left the screen!');
 	};
 
 	return (
@@ -29,15 +30,20 @@ function TinderCards() {
 					<TinderCard
 						className='tinderCards__swipe'
 						key={person.name}
-						preventSwipe={["up", "down"]}
+						preventSwipe={['up', 'down']}
 						onSwipe={(dir) => swiped(dir, person.name)}
 						onCardLeftScreen={() => outOfFrame(person.name)}
 					>
+						<img
+							className='header__logo'
+							src={TickrLogo}
+							alt='tinderLogo'
+						/>
 						<div
 							className='tinderCards__card'
 							style={{ backgroundImage: `url(${person.url})` }}
 						>
-							<h3>{person.name}</h3>
+							<h3>{person.name} hello</h3>
 						</div>
 					</TinderCard>
 				))}
