@@ -1,17 +1,21 @@
-import express from 'express';
+/* eslint-disable @typescript-eslint/no-var-requires */
+import { sign } from "crypto";
+import express from "express";
 const router = express.Router();
 const finnhub = require('finnhub');
-import { signIn, signUp } from './supabase';
+import { signIn, signUp, getTickers } from './supabase';
 
 const api_key = finnhub.ApiClient.instance.authentications['api_key'];
 api_key.apiKey = process.env.API_KEY;
 const finnhubClient = new finnhub.DefaultApi();
 
-router.route('/').get((_req, res) => {
+router.route("/").get((_req, res) => {
 	res.send(`<h2>Hello world<h2/>`);
 });
 
-router.get('/companyProfile', (req, res) => {
+router.get("/tickers", getTickers);
+
+router.get("/companyProfile", (req, res) => {
 	const { symbol } = req.query;
 	try {
 		finnhubClient.companyProfile2(
@@ -40,7 +44,7 @@ router.get('/companyProfile', (req, res) => {
 			}
 		);
 	} catch (error) {
-		throw new Error('nah');
+		throw new Error("nah");
 	}
 });
 
