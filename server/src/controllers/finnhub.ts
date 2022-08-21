@@ -40,6 +40,47 @@ const getCompanyProfile = async (symbol: string) => {
 	}
 };
 
+const getRecTrends = (req: Request, res: Response) => {
+	const { symbol } = req.query;
+	try {
+		finnhubClient.recommendationTrends(
+			symbol,
+			(_error: any, data: any, _response: any) => {
+				res.json(data[0]);
+			}
+		);
+	} catch (error) {
+		console.log(error);
+		throw new Error("nah");
+	}
+};
+
+const getHistoricalData = (req: Request, res: Response) => {
+	const { symbol } = req.query;
+	console.log(symbol);
+	const now = Date.now();
+	const weekAgo = now - 7776000;
+
+	console.log(now);
+	console.log(weekAgo);
+
+	try {
+		finnhubClient.stockCandles(
+			symbol,
+			"D",
+			1660899599 - 11232000,
+			1660899599,
+			(_error: any, data: any, _response: any) => {
+				console.log(data);
+				res.json({ closed: data.c });
+			}
+		);
+	} catch (error) {
+		console.log(error);
+		throw new Error("nah");
+	}
+};
+
 const getCompanyNews = (req: Request, res: Response) => {
 	const { symbol } = req.query;
 	//"AAPL", "2020-01-01", "2020-05-01"
@@ -60,7 +101,7 @@ const getCompanyNews = (req: Request, res: Response) => {
 			(_error: any, data: any, _response: any) => {
 				// const { datetime, headline, image, source, summary, url } =
 				// 	data;
-				console.log("data", data);
+				// console.log("data", data);
 				res.json(data);
 			}
 		);
@@ -72,16 +113,22 @@ const getCompanyNews = (req: Request, res: Response) => {
 const getMarketNews = (req: Request, res: Response) => {
 	try {
 		finnhubClient.marketNews(
-			'general',
+			"general",
 			{},
 			(_error: any, data: any, _response: any) => {
-				console.log('data', data);
+				console.log("data", data);
 				res.json(data);
 			}
 		);
 	} catch (error) {
-		throw new Error('nah');
+		throw new Error("nah");
 	}
 };
 
-export { getMarketNews, getCompanyNews, getCompanyProfile };
+export {
+	getMarketNews,
+	getCompanyNews,
+	getCompanyProfile,
+	getRecTrends,
+	getHistoricalData,
+};
