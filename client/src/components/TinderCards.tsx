@@ -11,8 +11,20 @@ interface Stock {
 	marketCap: string;
 }
 
+interface MarketNewsStory {
+	category: string;
+	datetime: EpochTimeStamp;
+	headline: string;
+	id: number;
+	image: string;
+	related: string;
+	source: string;
+	summary: string;
+	url: string;
+}
+
 interface CompanyNewsStory {
-	datetime: number; // 1661013000,
+	datetime: EpochTimeStamp; // 1661013000,
 	category: string; // "company",
 	headline: string; // "Things Just Got Tougher for Peloton",
 	id: number; // 115338334,
@@ -25,6 +37,7 @@ interface CompanyNewsStory {
 
 function TinderCards() {
 	const [stocks, setStocks] = useState<Stock[]>([]);
+	const [marketNews, setMarketNews] = useState<MarketNewsStory[]>([]);
 	const [windowSize, setWindowSize] = useState(getWindowSize());
 	const [stockIndex, setStockIndex] = useState<number>(0);
 	const [companyNews, setCompanyNews] = useState<CompanyNewsStory[]>([]);
@@ -51,14 +64,26 @@ function TinderCards() {
 				marketCap: 'fake market cap 2'
 			}
 		]);
-		getCompanyNews('AAPL') // HARD CODED!!
-			.then(
+		if (marketNews === []) {
+			getMarketNews().then(
 				(response: any) => {
-					setCompanyNews(response.data);
-					console.log(companyNews);
+					console.log(response);
+					setMarketNews(response.data);
+					console.log('market news:', companyNews);
 				},
 				(error: any) => {}
 			);
+		}
+		if (companyNews === [] || companyNews[0].related === 'AAPL') {
+			getCompanyNews('AAPL') // HARD CODED!!
+				.then(
+					(response: any) => {
+						setCompanyNews(response.data);
+						console.log('company news:', companyNews);
+					},
+					(error: any) => {}
+				);
+		}
 	}, []);
 
 	const getCompanyNews = async (symbol: string) => {
@@ -67,6 +92,10 @@ function TinderCards() {
 				symbol: symbol
 			}
 		});
+	};
+
+	const getMarketNews = async () => {
+		return axios.get(process.env.REACT_APP_SERVER_URL + 'getMarketNews');
 	};
 
 	const swiped = (direction: string, nameToDelete: string) => {
@@ -91,7 +120,7 @@ function TinderCards() {
 		} else {
 			if (cardView > MIN_CARD_VIEW) setCardView(cardView - 1);
 		}
-		console.log(companyNews);
+		console.log('market news: ', marketNews);
 	};
 
 	return (
@@ -131,10 +160,32 @@ function TinderCards() {
 						)}
 						{cardView === 3 && (
 							<div
-								className='tinderCards__card'
+								className='tinderCards__card company_news'
 								onClick={(event) => changeCardView(event)}
 							>
-								<p>view 3</p>
+								<h2>Company News</h2>
+								{companyNews.map((story) => {
+									return (
+										<div
+											key={story.id}
+											className='story company_news'
+										>
+											<img
+												alt={`${story.headline} image`}
+												src={story.image}
+											></img>
+											<a
+												href={story.url}
+												className='company_news'
+											>
+												<p>{story.headline}</p>
+											</a>
+											<p>{story.source}</p>
+											<p>{story.summary}</p>
+											<p>{story.datetime}</p>
+										</div>
+									);
+								})}
 							</div>
 						)}
 						{cardView === 4 && (
@@ -142,7 +193,8 @@ function TinderCards() {
 								className='tinderCards__card company_news'
 								onClick={(event) => changeCardView(event)}
 							>
-								{companyNews.map((story) => {
+								<h2>Market News</h2>
+								{marketNews.map((story) => {
 									return (
 										<div
 											key={story.id}
@@ -163,7 +215,6 @@ function TinderCards() {
 											<p>{story.datetime}</p>
 										</div>
 									);
-									<a>text to display!</a>;
 								})}
 							</div>
 						)}

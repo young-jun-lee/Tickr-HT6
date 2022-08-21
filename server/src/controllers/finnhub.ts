@@ -37,7 +37,7 @@ const getCompanyProfile = (symbol: string) => {
 				// return metrics;
 			}
 		);
-		// console.log(metrics);
+		console.log(metrics);
 	} catch (error) {
 		throw new Error('nah');
 	}
@@ -72,4 +72,19 @@ const getCompanyNews = (req: Request, res: Response) => {
 	}
 };
 
-export { getCompanyNews, getCompanyProfile };
+const getMarketNews = (req: Request, res: Response) => {
+	try {
+		finnhubClient.marketNews(
+			'general',
+			{},
+			(_error: any, data: any, _response: any) => {
+				console.log('data', data);
+				res.json(data);
+			}
+		);
+	} catch (error) {
+		throw new Error('nah');
+	}
+};
+
+export { getMarketNews, getCompanyNews, getCompanyProfile };
