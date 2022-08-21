@@ -1,8 +1,8 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import moment, { Moment } from 'moment';
-import TinderCard from 'react-tinder-card';
-import 'styles/TinderCards.css';
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import moment, { Moment } from "moment";
+import TinderCard from "react-tinder-card";
+import "styles/TinderCards.css";
 
 interface Stock {
 	logoUrl: string;
@@ -134,20 +134,29 @@ function TinderCards() {
 			}
 		);
 		const firstClosed = historicalData.data.closed[90];
-		const oneDay =
-			((firstClosed - historicalData.data.closed[89]) /
-				historicalData.data.closed[89]) *
-			100;
+		const oneWeek =
+			Math.round(
+				((firstClosed - historicalData.data.closed[83]) /
+					historicalData.data.closed[83]) *
+					100 *
+					100
+			) / 100;
 		const oneMonth =
-			((firstClosed - historicalData.data.closed[60]) /
-				historicalData.data.closed[60]) *
-			100;
+			Math.round(
+				((firstClosed - historicalData.data.closed[60]) /
+					historicalData.data.closed[60]) *
+					100 *
+					100
+			) / 100;
 		const threeMonths =
-			((firstClosed - historicalData.data.closed[0]) /
-				historicalData.data.closed[0]) *
-			100;
+			Math.round(
+				((firstClosed - historicalData.data.closed[0]) /
+					historicalData.data.closed[0]) *
+					100 *
+					100
+			) / 100;
 		// setAnalytics(recommendations.data);
-		setPriceChanges({ oneDay, oneMonth, threeMonths });
+		setPriceChanges({ oneWeek, oneMonth, threeMonths });
 	};
 
 	const swiped = (direction: string, nameToDelete: string) => {
@@ -188,7 +197,7 @@ function TinderCards() {
 					>
 						{cardView === 1 && (
 							<div
-								className='tinderCards__card'
+								className='tinderCards__card card1'
 								onClick={(event) => {
 									changeCardView(event);
 									getRecTrends(stock.ticker);
@@ -209,15 +218,75 @@ function TinderCards() {
 						)}
 						{cardView === 2 && (
 							<div
-								className='tinderCards__card'
+								className='tinderCards__card card1'
 								onClick={(event) => changeCardView(event)}
 							>
-								<div>sell {analytics.sell}</div>
-								<div>hold {analytics.hold}</div>
-								<div>buy {analytics.buy}</div>
-								<div>buy {priceChanges.oneDay}</div>
-								<div>buy {priceChanges.oneMonth}</div>
-								<div>buy {priceChanges.threeMonths}</div>
+								<div className='grid-container'>
+									<div
+										className='grid-item'
+										style={{
+											color: "#8A1C1C",
+										}}
+									>
+										{analytics.sell}
+									</div>
+									<div className='grid-item'>
+										{analytics.hold}
+									</div>
+									<div
+										className='grid-item'
+										style={{
+											color: "#458D2C",
+										}}
+									>
+										{analytics.buy}
+									</div>
+									<div className='grid-item title'>sell</div>
+									<div className='grid-item title'>hold</div>
+									<div className='grid-item title'>buy</div>
+									<div
+										className='grid-item'
+										style={{
+											color:
+												priceChanges.oneWeek > 0
+													? "#458D2C"
+													: "#8A1C1C",
+										}}
+									>
+										{priceChanges.oneWeek}%
+									</div>
+									<div
+										className='grid-item'
+										style={{
+											color:
+												priceChanges.oneWeek > 0
+													? "#458D2C"
+													: "#8A1C1C",
+										}}
+									>
+										{priceChanges.oneMonth}%
+									</div>
+									<div
+										className='grid-item'
+										style={{
+											color:
+												priceChanges.oneWeek > 0
+													? "#458D2C"
+													: "#8A1C1C",
+										}}
+									>
+										{priceChanges.threeMonths}%
+									</div>
+									<div className='grid-item title'>
+										1 week
+									</div>
+									<div className='grid-item title'>
+										1 month
+									</div>
+									<div className='grid-item title'>
+										3 month
+									</div>
+								</div>
 							</div>
 						)}
 						{cardView === 3 && (
@@ -244,7 +313,9 @@ function TinderCards() {
 												>
 													<p>{story.headline}</p>
 												</a>
-												<p className="story source">{story.source}</p>
+												<p className='story source'>
+													{story.source}
+												</p>
 											</div>
 											<p className='story summary'>
 												{story.summary}

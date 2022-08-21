@@ -30,6 +30,27 @@
 
 .companyProfile {
 	margin-top: 5vw;
+	font-weight: bold;
+}
+
+.analytics {
+	display: flex;
+	flex-direction: row;
+}
+
+.grid-container {
+	display: grid;
+	grid-template-columns: auto auto auto;
+}
+.grid-item {
+	padding: 20px;
+	font-size: 25px;
+	font-weight: bold;
+	text-align: center;
+}
+.grid-item.title {
+	padding-top: 0;
+	font-weight: normal;
 }
 
 .tinderCards__swipe {
