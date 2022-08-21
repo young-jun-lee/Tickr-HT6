@@ -1,5 +1,4 @@
-.tinderCards{
-	
+.tinderCards {
 	width: 100%;
 	height: 100px;
 }
@@ -24,6 +23,9 @@
 
 .tinderCards__swipe {
 	position: absolute;
+	opacity: 100%;
+	background-color: white;
+	border-radius: 25px;
 }
 
 .tinderCards__card > h3 {
