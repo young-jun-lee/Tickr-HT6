@@ -221,6 +221,7 @@ function TinderCards() {
 								className='tinderCards__card card1'
 								onClick={(event) => changeCardView(event)}
 							>
+								<div className='analyticsTitle'>{`${stock.ticker} | ${stock.sector}`}</div>
 								<div className='grid-container'>
 									<div
 										className='grid-item'

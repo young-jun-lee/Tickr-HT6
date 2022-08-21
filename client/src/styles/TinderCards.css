@@ -38,6 +38,11 @@
 	flex-direction: row;
 }
 
+.analyticsTitle {
+	font-size: 25px;
+	font-weight: bold;
+}
+
 .grid-container {
 	display: grid;
 	grid-template-columns: auto auto auto;
