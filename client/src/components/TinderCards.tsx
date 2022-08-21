@@ -210,9 +210,11 @@ function TinderCards() {
 									alt={`${stock.ticker} logo`}
 								/>
 								<div className='companyProfile'>
-									<h3>{stock.ticker}</h3>
+									<h3 style={{ fontSize: "40px" }}>
+										{stock.ticker}
+									</h3>
 									<p>{`${stock.name} | ${stock.sector}`}</p>
-									<p>Market Cap: {stock.marketCap}</p>
+									<p>${stock.marketCap}B</p>
 								</div>
 							</div>
 						)}
