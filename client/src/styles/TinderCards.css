@@ -36,23 +36,23 @@
 	border-radius: 25px;
 }
 
-.company_news.tinderCards__card {
+.news.tinderCards__card {
 	overflow: scroll;
 }
-.company_news.story {
+.news.story {
 	padding: 5px;
 }
 
-.company_news.story > * {
+.news.story > * {
 	padding: 1px;
 }
 
-.company_news.story > img {
+.news.story > img {
 	/* width: 20px; */
 	height: 40px;
 }
 
-a.company_news {
+a.news {
 	color: blue;
 	max-height: 5px;
 	font-style: bold;

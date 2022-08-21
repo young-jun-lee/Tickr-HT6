@@ -167,7 +167,7 @@ function TinderCards() {
 						)}
 						{cardView === 3 && (
 							<div
-								className='tinderCards__card company_news'
+								className='tinderCards__card news'
 								onClick={(event) => changeCardView(event)}
 							>
 								<h2>Company News</h2>
@@ -175,7 +175,7 @@ function TinderCards() {
 									return (
 										<div
 											key={story.id}
-											className='story company_news'
+											className='story news'
 										>
 											<img
 												alt={`${story.headline} image`}
@@ -183,7 +183,7 @@ function TinderCards() {
 											></img>
 											<a
 												href={story.url}
-												className='company_news'
+												className='news'
 											>
 												<p>{story.headline}</p>
 											</a>
@@ -197,7 +197,7 @@ function TinderCards() {
 						)}
 						{cardView === 4 && (
 							<div
-								className='tinderCards__card company_news'
+								className='tinderCards__card news'
 								onClick={(event) => changeCardView(event)}
 							>
 								<h2>Market News</h2>
@@ -205,7 +205,7 @@ function TinderCards() {
 									return (
 										<div
 											key={story.id}
-											className='story company_news'
+											className='story news'
 										>
 											<img
 												alt={`${story.headline} image`}
@@ -213,7 +213,7 @@ function TinderCards() {
 											></img>
 											<a
 												href={story.url}
-												className='company_news'
+												className='news'
 											>
 												<p>{story.headline}</p>
 											</a>
