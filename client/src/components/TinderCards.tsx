@@ -1,14 +1,17 @@
-import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import TinderCard from 'react-tinder-card';
 import 'styles/TinderCards.css';
 
 interface Stock {
-	logo: string;
+	logoUrl: string;
+	ipo: string;
 	ticker: string;
 	index: string;
+	name: string;
 	sector: string;
 	marketCap: string;
+	dateFetched: string;
 }
 
 interface MarketNewsStory {
@@ -36,6 +39,12 @@ interface CompanyNewsStory {
 }
 
 function TinderCards() {
+	function getWindowSize() {
+		const { innerWidth, innerHeight } = window;
+		return { innerWidth, innerHeight };
+	}
+
+	const [nextStack, fetchMore] = useState(<></>);
 	const [stocks, setStocks] = useState<Stock[]>([]);
 	const [marketNews, setMarketNews] = useState<MarketNewsStory[]>([]);
 	const [windowSize, setWindowSize] = useState(getWindowSize());
@@ -45,25 +54,33 @@ function TinderCards() {
 	const MAX_CARD_VIEW = 4;
 	const MIN_CARD_VIEW = 1;
 
+	// useEffect(() => {
+	// make axios call to back end
+	// call should return a list of 50 stocks in the following format!
+	// setStocks([
+	// 	{
+	// 		logo: 'https://www.freepnglogos.com/uploads/flour-png/flour-flower-png-transparent-png-images-pluspng-2.png',
+	// 		ticker: 'fake ticker',
+	// 		index: 'fake index',
+	// 		sector: 'fake sector',
+	// 		marketCap: 'fake market cap'
+	// 	},
+	// 	{
+	// 		logo: 'https://www.freepnglogos.com/uploads/flour-png/flour-flower-png-transparent-png-images-pluspng-2.png',
+	// 		ticker: 'fake ticker 2',
+	// 		index: 'fake index 2',
+	// 		sector: 'fake sector 2',
+	// 		marketCap: 'fake market cap 2'
+	// 	}
+	// ]);
+
+	// }
+
 	useEffect(() => {
-		// make axios call to back end
-		// call should return a list of 50 stocks in the following format!
-		setStocks([
-			{
-				logo: 'https://www.freepnglogos.com/uploads/flour-png/flour-flower-png-transparent-png-images-pluspng-2.png',
-				ticker: 'fake ticker',
-				index: 'fake index',
-				sector: 'fake sector',
-				marketCap: 'fake market cap'
-			},
-			{
-				logo: 'https://www.freepnglogos.com/uploads/flour-png/flour-flower-png-transparent-png-images-pluspng-2.png',
-				ticker: 'fake ticker 2',
-				index: 'fake index 2',
-				sector: 'fake sector 2',
-				marketCap: 'fake market cap 2'
-			}
-		]);
+		axios.get(`${process.env.REACT_APP_SERVER_URL}tickers`).then((res) => {
+			console.log(res.data);
+			setStocks(res.data.companyProfilesArray);
+		});
 		if (marketNews === []) {
 			getMarketNews().then(
 				(response: any) => {
@@ -74,17 +91,41 @@ function TinderCards() {
 				(error: any) => {}
 			);
 		}
-		if (companyNews === [] || companyNews[0].related === 'AAPL') {
-			getCompanyNews('AAPL') // HARD CODED!!
-				.then(
-					(response: any) => {
-						setCompanyNews(response.data);
-						console.log('company news:', companyNews);
-					},
-					(error: any) => {}
-				);
-		}
+		// if (companyNews === [] || companyNews[0].related === 'AAPL') {
+		getCompanyNews('AAPL') // HARD CODED!!
+			.then(
+				(response: any) => {
+					setCompanyNews(response.data);
+					console.log('company news:', companyNews);
+				},
+				(error: any) => {}
+			);
+		// }
 	}, []);
+
+	useEffect(() => {
+		if (stocks.length === 0) {
+			fetchMore(
+				<button
+					onClick={() => {
+						axios
+							.get(`${process.env.REACT_APP_SERVER_URL}/tickers`)
+							.then((res) => {
+								console.log(res.data);
+								setStocks(res.data.companyProfilesArray);
+							});
+						console.log(stocks);
+					}}
+				>
+					see more?
+				</button>
+			);
+		}
+	}, [stocks, stocks.length]);
+
+	const getMarketNews = async () => {
+		return axios.get(process.env.REACT_APP_SERVER_URL + 'getMarketNews');
+	};
 
 	const getCompanyNews = async (symbol: string) => {
 		return axios.get(process.env.REACT_APP_SERVER_URL + 'getCompanyNews', {
@@ -92,10 +133,6 @@ function TinderCards() {
 				symbol: symbol
 			}
 		});
-	};
-
-	const getMarketNews = async () => {
-		return axios.get(process.env.REACT_APP_SERVER_URL + 'getMarketNews');
 	};
 
 	const swiped = (direction: string, nameToDelete: string) => {
@@ -107,11 +144,6 @@ function TinderCards() {
 		setCardView(1);
 		setStockIndex(stockIndex + 1);
 	};
-
-	function getWindowSize() {
-		const { innerWidth, innerHeight } = window;
-		return { innerWidth, innerHeight };
-	}
 
 	const changeCardView = (event: any) => {
 		setWindowSize(getWindowSize());
@@ -138,16 +170,17 @@ function TinderCards() {
 							<div
 								className='tinderCards__card'
 								onClick={(event) => changeCardView(event)}
-								// style={{ backgroundImage: `url(${stock.logo})` }}
 							>
 								<img
 									className='stock__logo'
-									src={stock.logo}
+									src={stock.logoUrl}
 									alt={`${stock.ticker} logo`}
 								/>
-								<h3>{stock.ticker}</h3>
-								<p>{`${stock.index} | ${stock.sector}`}</p>
-								<p>{stock.marketCap}</p>
+								<div className='companyProfile'>
+									<h3>{stock.ticker}</h3>
+									<p>{`${stock.name} | ${stock.sector}`}</p>
+									<p>Market Cap: {stock.marketCap}</p>
+								</div>
 							</div>
 						)}
 						{cardView === 2 && (
@@ -201,7 +234,7 @@ function TinderCards() {
 											className='story company_news'
 										>
 											<img
-												alt={`${story.headling} image`}
+												alt={`${story.headline} image`}
 												src={story.image}
 											></img>
 											<a
@@ -220,6 +253,7 @@ function TinderCards() {
 						)}
 					</TinderCard>
 				))}
+				{nextStack}
 			</div>
 		</div>
 	);

@@ -10,15 +10,23 @@
 }
 
 .tinderCards__card {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
 	position: relative;
-	width: 600px;
+	width: 450px;
 	padding: 20px;
 	max-width: 85vw;
-	height: 50vh;
+	height: 70vh;
 	box-shadow: 0px 18px 53px 0px rgba(0, 0, 0, 0.3);
 	border-radius: 20px;
 	background-size: cover;
 	background-position: center;
+}
+
+.companyProfile {
+	margin-top: 5vw;
 }
 
 .tinderCards__swipe {
@@ -51,5 +59,7 @@ a.company_news {
 }
 
 .stock__logo {
-	height: 50%;
+	max-height: 50%;
+	max-width: 50%;
+	/* height: 50%; */
 }

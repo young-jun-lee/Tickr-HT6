@@ -16,9 +16,14 @@ const getTickers = async (req: Request, res: Response) => {
 			.select("Symbol");
 		if (error) throw error;
 		const symbols = data.map((a) => a.Symbol);
-		const companyProfiles = await getCompanyProfile(symbols);
-		// console.log(companyProfiles);
-		res.json({ data }).send();
+		const companyProfilesArray = [];
+
+		for (const symbol of symbols) {
+			const companyProfile = await getCompanyProfile(symbol);
+			companyProfilesArray.push(companyProfile);
+		}
+
+		res.json({ companyProfilesArray }).send();
 	} catch (err) {
 		console.error(err);
 	}
