@@ -1,7 +1,8 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import TinderCard from "react-tinder-card";
-import "styles/TinderCards.css";
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import moment, { Moment } from 'moment';
+import TinderCard from 'react-tinder-card';
+import 'styles/TinderCards.css';
 
 interface Stock {
 	logoUrl: string;
@@ -55,28 +56,6 @@ function TinderCards() {
 	const [analytics, setAnalytics] = useState({});
 	const MAX_CARD_VIEW = 4;
 	const MIN_CARD_VIEW = 1;
-
-	// useEffect(() => {
-	// make axios call to back end
-	// call should return a list of 50 stocks in the following format!
-	// setStocks([
-	// 	{
-	// 		logo: 'https://www.freepnglogos.com/uploads/flour-png/flour-flower-png-transparent-png-images-pluspng-2.png',
-	// 		ticker: 'fake ticker',
-	// 		index: 'fake index',
-	// 		sector: 'fake sector',
-	// 		marketCap: 'fake market cap'
-	// 	},
-	// 	{
-	// 		logo: 'https://www.freepnglogos.com/uploads/flour-png/flour-flower-png-transparent-png-images-pluspng-2.png',
-	// 		ticker: 'fake ticker 2',
-	// 		index: 'fake index 2',
-	// 		sector: 'fake sector 2',
-	// 		marketCap: 'fake market cap 2'
-	// 	}
-	// ]);
-
-	// }
 
 	useEffect(() => {
 		axios.get(`${process.env.REACT_APP_SERVER_URL}tickers`).then((res) => {
@@ -191,6 +170,11 @@ function TinderCards() {
 		console.log("market news: ", marketNews);
 	};
 
+	const getFormattedDate = (epoch: EpochTimeStamp) => {
+		var date = new Date(epoch * 1000);
+		return date.toLocaleString();
+	};
+
 	return (
 		<div className='tinderCards'>
 			<div className='tinderCards__cardContainer'>
@@ -238,7 +222,7 @@ function TinderCards() {
 						)}
 						{cardView === 3 && (
 							<div
-								className='tinderCards__card company_news'
+								className='tinderCards__card news'
 								onClick={(event) => changeCardView(event)}
 							>
 								<h2>Company News</h2>
@@ -246,21 +230,30 @@ function TinderCards() {
 									return (
 										<div
 											key={story.id}
-											className='story company_news'
+											className='story news'
 										>
-											<img
-												alt={`${story.headline} image`}
-												src={story.image}
-											></img>
-											<a
-												href={story.url}
-												className='company_news'
-											>
-												<p>{story.headline}</p>
-											</a>
-											<p>{story.source}</p>
-											<p>{story.summary}</p>
-											<p>{story.datetime}</p>
+											<div classname='story title'>
+												<img
+													alt={`story`}
+													src={story.image}
+													className='story'
+												/>
+												<a
+													href={story.url}
+													className='news'
+												>
+													<p>{story.headline}</p>
+												</a>
+												<p className="story source">{story.source}</p>
+											</div>
+											<p className='story summary'>
+												{story.summary}
+											</p>
+											<p className='story date'>
+												{getFormattedDate(
+													story.datetime
+												)}
+											</p>
 										</div>
 									);
 								})}
@@ -268,7 +261,7 @@ function TinderCards() {
 						)}
 						{cardView === 4 && (
 							<div
-								className='tinderCards__card company_news'
+								className='tinderCards__card news'
 								onClick={(event) => changeCardView(event)}
 							>
 								<h2>Market News</h2>
@@ -276,21 +269,30 @@ function TinderCards() {
 									return (
 										<div
 											key={story.id}
-											className='story company_news'
+											className='story news'
 										>
-											<img
-												alt={`${story.headline} image`}
-												src={story.image}
-											></img>
-											<a
-												href={story.url}
-												className='company_news'
-											>
-												<p>{story.headline}</p>
-											</a>
-											<p>{story.source}</p>
-											<p>{story.summary}</p>
-											<p>{story.datetime}</p>
+											<div classname='story title'>
+												<img
+													alt={`story`}
+													src={story.image}
+													className='story'
+												/>
+												<a
+													href={story.url}
+													className='news'
+												>
+													<p>{story.headline}</p>
+												</a>
+												<p>{story.source}</p>
+											</div>
+											<p className='story summary'>
+												{story.summary}
+											</p>
+											<p className='story date'>
+												{getFormattedDate(
+													story.datetime
+												)}
+											</p>
 										</div>
 									);
 								})}
