@@ -36,6 +36,28 @@
 	border-radius: 25px;
 }
 
+.company_news.tinderCards__card {
+	overflow: scroll;
+}
+.company_news.story {
+	padding: 5px;
+}
+
+.company_news.story > * {
+	padding: 1px;
+}
+
+.company_news.story > img {
+	/* width: 20px; */
+	height: 40px;
+}
+
+a.company_news {
+	color: blue;
+	max-height: 5px;
+	font-style: bold;
+}
+
 .stock__logo {
 	max-height: 50%;
 	max-width: 50%;
