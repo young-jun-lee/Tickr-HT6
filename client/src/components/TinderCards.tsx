@@ -1,45 +1,54 @@
-import React, { useEffect, useState } from 'react';
-import TinderCard from 'react-tinder-card';
-import 'styles/TinderCards.css';
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import TinderCard from "react-tinder-card";
+import "styles/TinderCards.css";
 
 interface Stock {
-	logo: string;
+	logoUrl: string;
+	ipo: string;
 	ticker: string;
 	index: string;
+	name: string;
 	sector: string;
-	marketCap: string;
+	marketCap: number;
+	dateFetched: string;
 }
 
 function TinderCards() {
 	const [stocks, setStocks] = useState<Stock[]>([]);
+	const [nextStack, fetchMore] = useState(<></>);
 
 	useEffect(() => {
-		// make axios call to back end
-		// call should return a list of 50 stocks in the following format!
-		setStocks([
-			{
-				logo: 'https://www.freepnglogos.com/uploads/flour-png/flour-flower-png-transparent-png-images-pluspng-2.png',
-				ticker: 'fake ticker',
-				index: 'fake index',
-				sector: 'fake sector',
-				marketCap: 'fake market cap'
-			},
-			{
-				logo: 'https://www.freepnglogos.com/uploads/flour-png/flour-flower-png-transparent-png-images-pluspng-2.png',
-				ticker: 'fake ticker 2',
-				index: 'fake index 2',
-				sector: 'fake sector 2',
-				marketCap: 'fake market cap 2'
-			}
-		]);
+		axios.get(`${process.env.REACT_APP_SERVER_URL}/tickers`).then((res) => {
+			console.log(res.data);
+			setStocks(res.data.companyProfilesArray);
+		});
 	}, []);
 
-	const swiped = (direction: string, nameToDelete: string) => {
-		console.log('removing:' + nameToDelete);
-	};
+	useEffect(() => {
+		if (stocks.length === 0) {
+			fetchMore(
+				<button
+					onClick={() => {
+						axios
+							.get(`${process.env.REACT_APP_SERVER_URL}/tickers`)
+							.then((res) => {
+								console.log(res.data);
+								setStocks(res.data.companyProfilesArray);
+							});
+						console.log(stocks);
+					}}
+				>
+					see more?
+				</button>
+			);
+		}
+	}, [stocks, stocks.length]);
+
+	const swiped = (direction: string, nameToDelete: string) => {};
 
 	const outOfFrame = (name: string) => {
-		console.log(name + ' left the screen!');
+		console.log(name + " left the screen!");
 	};
 
 	return (
@@ -49,25 +58,25 @@ function TinderCards() {
 					<TinderCard
 						className='tinderCards__swipe'
 						key={stock.ticker}
-						preventSwipe={['up', 'down']}
+						preventSwipe={["up", "down"]}
 						onSwipe={(dir) => swiped(dir, stock.ticker)}
 						onCardLeftScreen={() => outOfFrame(stock.ticker)}
 					>
-						<div
-							className='tinderCards__card'
-							// style={{ backgroundImage: `url(${stock.logo})` }}
-						>
+						<div className='tinderCards__card'>
 							<img
 								className='stock__logo'
-								src={stock.logo}
+								src={stock.logoUrl}
 								alt={`${stock.ticker} logo`}
 							/>
-							<h3>{stock.ticker}</h3>
-							<p>{`${stock.index} | ${stock.sector}`}</p>
-							<p>{stock.marketCap}</p>
+							<div className='companyProfile'>
+								<h3>{stock.ticker}</h3>
+								<p>{`${stock.name} | ${stock.sector}`}</p>
+								<p>Market Cap: {stock.marketCap}</p>
+							</div>
 						</div>
 					</TinderCard>
 				))}
+				{nextStack}
 			</div>
 		</div>
 	);
