@@ -13,7 +13,7 @@ router.get('/tickers', getTickers);
 router.get('/companyProfiles', getCompanyProfile);
 router.get('/getCompanyNews', getCompanyNews);
 
-router.post('/signUp', signUp);
-router.post('/signIn', signIn);
+router.post("/signUp", signUp);
+router.post("/signIn", signIn);
 
 module.exports = router;

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { Request, Response } from 'express';
+import axios from 'axios';
 import moment from 'moment';
 const finnhub = require('finnhub');
 const api_key = finnhub.ApiClient.instance.authentications['api_key'];
@@ -7,10 +8,11 @@ api_key.apiKey = process.env.API_KEY;
 
 const finnhubClient = new finnhub.DefaultApi();
 
-const getCompanyProfile = (req: Request, res: Response) => {
-	const { symbol } = req.query;
+const getCompanyProfile = (symbol: string) => {
+	// let metrics;
 	try {
-		finnhubClient.companyProfile2(
+		console.log(symbol);
+		return finnhubClient.companyProfile2(
 			{ symbol },
 			(_error: any, data: any, _response: any) => {
 				const {
@@ -22,7 +24,7 @@ const getCompanyProfile = (req: Request, res: Response) => {
 					ticker,
 					finnhubIndustry
 				} = data;
-				res.json({
+				const metrics = {
 					country,
 					ipo,
 					logoUrl: logo,
@@ -31,10 +33,11 @@ const getCompanyProfile = (req: Request, res: Response) => {
 					ticker,
 					sector: finnhubIndustry,
 					dateFetched: new Date().toISOString().slice(0, 10)
-				});
-				// console.log(data);
+				};
+				// return metrics;
 			}
 		);
+		// console.log(metrics);
 	} catch (error) {
 		throw new Error('nah');
 	}
