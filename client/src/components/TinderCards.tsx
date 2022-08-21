@@ -81,17 +81,14 @@ function TinderCards() {
 			console.log(res.data);
 			setStocks(res.data.companyProfilesArray);
 		});
-		if (marketNews === []) {
-			getMarketNews().then(
-				(response: any) => {
-					console.log(response);
-					setMarketNews(response.data);
-					console.log('market news:', companyNews);
-				},
-				(error: any) => {}
-			);
-		}
-		// if (companyNews === [] || companyNews[0].related === 'AAPL') {
+		getMarketNews().then(
+			(response: any) => {
+				console.log(response);
+				setMarketNews(response.data);
+				console.log('market news:', companyNews);
+			},
+			(error: any) => {}
+		);
 		getCompanyNews('AAPL') // HARD CODED!!
 			.then(
 				(response: any) => {
@@ -100,7 +97,6 @@ function TinderCards() {
 				},
 				(error: any) => {}
 			);
-		// }
 	}, []);
 
 	useEffect(() => {
