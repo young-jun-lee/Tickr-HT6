@@ -1,19 +1,20 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { Request, Response } from 'express';
-import axios from 'axios';
-import moment from 'moment';
-const finnhub = require('finnhub');
-const api_key = finnhub.ApiClient.instance.authentications['api_key'];
+import { Request, Response } from "express";
+import axios from "axios";
+import moment from "moment";
+const finnhub = require("finnhub");
+const api_key = finnhub.ApiClient.instance.authentications["api_key"];
 api_key.apiKey = process.env.API_KEY;
 
 const finnhubClient = new finnhub.DefaultApi();
 
 const getCompanyProfile = async (symbol: string) => {
 	try {
-		console.log(symbol);
-		return finnhubClient.companyProfile2(
-			{ symbol },
-			(_error: any, data: any, _response: any) => {
+		return await axios
+			.get(
+				`https://finnhub.io/api/v1/stock/profile2?token=${process.env.API_KEY}&symbol=${symbol}`
+			)
+			.then((response) => {
 				const {
 					country,
 					ipo,
@@ -21,9 +22,9 @@ const getCompanyProfile = async (symbol: string) => {
 					marketCapitalization,
 					name,
 					ticker,
-					finnhubIndustry
-				} = data;
-				const metrics = {
+					finnhubIndustry,
+				} = response.data;
+				return {
 					country,
 					ipo,
 					logoUrl: logo,
@@ -31,14 +32,11 @@ const getCompanyProfile = async (symbol: string) => {
 					name,
 					ticker,
 					sector: finnhubIndustry,
-					dateFetched: new Date().toISOString().slice(0, 10)
+					dateFetched: new Date().toISOString().slice(0, 10),
 				};
-				// return metrics;
-			}
-		);
-		// console.log(metrics);
-	} catch (error) {
-		throw new Error('nah');
+			});
+	} catch (err) {
+		console.error(err);
 	}
 };
 
@@ -51,8 +49,8 @@ const getCompanyNews = (req: Request, res: Response) => {
 		now.getMonth(),
 		now.getDate() - 2
 	);
-	const start_date = moment(week_ago).format('YYYY-MM-DD');
-	const end_date = moment(now).format('YYYY-MM-DD');
+	const start_date = moment(week_ago).format("YYYY-MM-DD");
+	const end_date = moment(now).format("YYYY-MM-DD");
 	console.log(symbol, start_date, end_date);
 	try {
 		finnhubClient.companyNews(
@@ -62,12 +60,12 @@ const getCompanyNews = (req: Request, res: Response) => {
 			(_error: any, data: any, _response: any) => {
 				// const { datetime, headline, image, source, summary, url } =
 				// 	data;
-				console.log('data', data);
+				console.log("data", data);
 				res.json(data);
 			}
 		);
 	} catch (error) {
-		throw new Error('nah');
+		throw new Error("nah");
 	}
 };
 
