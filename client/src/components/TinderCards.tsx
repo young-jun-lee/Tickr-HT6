@@ -12,6 +12,10 @@ interface Stock {
 
 function TinderCards() {
 	const [stocks, setStocks] = useState<Stock[]>([]);
+	const [windowSize, setWindowSize] = useState(getWindowSize());
+	const [cardView, setCardView] = useState<number>(1);
+	const MAX_CARD_VIEW = 4;
+	const MIN_CARD_VIEW = 1;
 
 	useEffect(() => {
 		// make axios call to back end
@@ -40,6 +44,25 @@ function TinderCards() {
 
 	const outOfFrame = (name: string) => {
 		console.log(name + ' left the screen!');
+		setCardView(1);
+	};
+
+	function getWindowSize() {
+		const { innerWidth, innerHeight } = window;
+		return { innerWidth, innerHeight };
+	}
+
+	const changeCardView = (event: any) => {
+		setWindowSize(getWindowSize());
+		console.log(event.pageX, event.pageY);
+		console.log(windowSize.innerWidth);
+		if (event.pageX > windowSize.innerWidth / 2) {
+			if (cardView < MAX_CARD_VIEW) setCardView(cardView + 1);
+			console.log('next view: ', cardView);
+		} else {
+			if (cardView > MIN_CARD_VIEW) setCardView(cardView - 1);
+			console.log('prev view: ', cardView);
+		}
 	};
 
 	return (
@@ -53,19 +76,46 @@ function TinderCards() {
 						onSwipe={(dir) => swiped(dir, stock.ticker)}
 						onCardLeftScreen={() => outOfFrame(stock.ticker)}
 					>
-						<div
-							className='tinderCards__card'
-							// style={{ backgroundImage: `url(${stock.logo})` }}
-						>
-							<img
-								className='stock__logo'
-								src={stock.logo}
-								alt={`${stock.ticker} logo`}
-							/>
-							<h3>{stock.ticker}</h3>
-							<p>{`${stock.index} | ${stock.sector}`}</p>
-							<p>{stock.marketCap}</p>
-						</div>
+						{cardView === 1 && (
+							<div
+								className='tinderCards__card'
+								onClick={(event) => changeCardView(event)}
+								// style={{ backgroundImage: `url(${stock.logo})` }}
+							>
+								<img
+									className='stock__logo'
+									src={stock.logo}
+									alt={`${stock.ticker} logo`}
+								/>
+								<h3>{stock.ticker}</h3>
+								<p>{`${stock.index} | ${stock.sector}`}</p>
+								<p>{stock.marketCap}</p>
+							</div>
+						)}
+						{cardView === 2 && (
+							<div
+								className='tinderCards__card'
+								onClick={(event) => changeCardView(event)}
+							>
+								<p>view 2</p>
+							</div>
+						)}
+						{cardView === 3 && (
+							<div
+								className='tinderCards__card'
+								onClick={(event) => changeCardView(event)}
+							>
+								<p>view 3</p>
+							</div>
+						)}
+						{cardView === 4 && (
+							<div
+								className='tinderCards__card'
+								onClick={(event) => changeCardView(event)}
+							>
+								<p>view 4</p>
+							</div>
+						)}
 					</TinderCard>
 				))}
 			</div>
