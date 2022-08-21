@@ -1,5 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 import { Request, Response } from "express";
+import { getCompanyProfile } from "./finnhub";
 
 // Create a single supabase client for interacting with your database
 const supabase = createClient(
@@ -10,10 +11,14 @@ const supabase = createClient(
 const getTickers = async (req: Request, res: Response) => {
 	try {
 		// returns a list of 20 random tickers from our static stock database
-		const { data, error } = await supabase.rpc("get_tickers");
+		const { data, error } = await supabase
+			.rpc("get_tickers")
+			.select("Symbol");
 		if (error) throw error;
+		const symbols = data.map((a) => a.Symbol);
+		const companyProfiles = await getCompanyProfile(symbols);
+		// console.log(companyProfiles);
 		res.json({ data }).send();
-		res.redirect(`${process.env.clientURL}/companyProfiles`);
 	} catch (err) {
 		console.error(err);
 	}

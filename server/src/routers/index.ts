@@ -1,6 +1,6 @@
 import express from "express";
 import { getCompanyProfile } from "../controllers/finnhub";
-import { signUp, getTickers } from "../controllers/supabase";
+import { signUp, getTickers, signIn } from "../controllers/supabase";
 
 const router = express.Router();
 
@@ -12,7 +12,7 @@ router.get("/tickers", getTickers);
 
 router.get("/companyProfiles", getCompanyProfile);
 
-router.post('/signUp', signUp);
-router.post('/signIn', signIn);
+router.post("/signUp", signUp);
+router.post("/signIn", signIn);
 
 module.exports = router;
