@@ -33,16 +33,15 @@ const SignUp: React.FC = () => {
 
 		register(email, password).then(
 			(response: any) => {
-				setMessage(response.data.message);
+				setMessage(
+					'You have successfully signed up. In a moment you will be redirected to the home page!'
+				);
 				setSuccessful(true);
+				window.location.href = '/';
 			},
 			(error: any) => {
 				const resMessage =
-					(error.response &&
-						error.response.data &&
-						error.response.data.message) ||
-					error.message ||
-					error.toString();
+					error.response.data || error.message || error.toString();
 
 				setMessage(resMessage);
 				setSuccessful(false);

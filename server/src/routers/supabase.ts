@@ -23,7 +23,8 @@ const getTickers = async (req: Request, res: Response) => {
 const signUp = async (req: Request, res: Response) => {
 	try {
 		const { email, password } = req.body;
-		console.log(email);
+		console.log(req);
+		console.log(email, password);
 
 		const { user, session, error } = await supabase.auth.signUp({
 			email: email,
@@ -38,13 +39,13 @@ const signUp = async (req: Request, res: Response) => {
 		res.json({ user, session, error }).send();
 	} catch (err) {
 		console.error(err);
-		res.status(400).send();
+		res.status(err.status).send(err.message);
 	}
 };
 
 const signIn = async (req: Request, res: Response) => {
 	try {
-		const { email, password } = req.query;
+		const { email, password } = req.body;
 		console.log(email, password);
 
 		const { user, session, error } = await supabase.auth.signIn({

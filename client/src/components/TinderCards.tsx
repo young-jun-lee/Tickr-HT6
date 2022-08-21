@@ -16,6 +16,10 @@ function TinderCards() {
 			{
 				name: 'person1',
 				url: 'some url'
+			},
+			{
+				name: '2',
+				url: '2'
 			}
 		]);
 		// database

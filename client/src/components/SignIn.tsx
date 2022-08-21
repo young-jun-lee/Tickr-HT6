@@ -33,16 +33,17 @@ const SignIn: React.FC = () => {
 
 		logIn(email, password).then(
 			(response: any) => {
-				setMessage(response.data.message);
+				console.log(response);
+				setMessage(
+					'You have successfully logged in. In a moment you will be redirected to the home page!'
+				);
 				setSuccessful(true);
+				window.location.href = '/';
 			},
 			(error: any) => {
+				console.log(error);
 				const resMessage =
-					(error.response &&
-						error.response.data &&
-						error.response.data.message) ||
-					error.message ||
-					error.toString();
+					error.response.data || error.message || error.toString();
 
 				setMessage(resMessage);
 				setSuccessful(false);
