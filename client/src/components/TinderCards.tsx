@@ -54,28 +54,6 @@ function TinderCards() {
 	const MAX_CARD_VIEW = 4;
 	const MIN_CARD_VIEW = 1;
 
-	// useEffect(() => {
-	// make axios call to back end
-	// call should return a list of 50 stocks in the following format!
-	// setStocks([
-	// 	{
-	// 		logo: 'https://www.freepnglogos.com/uploads/flour-png/flour-flower-png-transparent-png-images-pluspng-2.png',
-	// 		ticker: 'fake ticker',
-	// 		index: 'fake index',
-	// 		sector: 'fake sector',
-	// 		marketCap: 'fake market cap'
-	// 	},
-	// 	{
-	// 		logo: 'https://www.freepnglogos.com/uploads/flour-png/flour-flower-png-transparent-png-images-pluspng-2.png',
-	// 		ticker: 'fake ticker 2',
-	// 		index: 'fake index 2',
-	// 		sector: 'fake sector 2',
-	// 		marketCap: 'fake market cap 2'
-	// 	}
-	// ]);
-
-	// }
-
 	useEffect(() => {
 		axios.get(`${process.env.REACT_APP_SERVER_URL}tickers`).then((res) => {
 			console.log(res.data);
