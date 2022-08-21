@@ -1,6 +1,7 @@
 import 'styles/App.css';
 import React from 'react';
 import SignUp from 'components/SignUp';
+import SignIn from 'components/SignIn';
 import Chats from 'components/Chats';
 import Header from 'components/Header';
 import ChatScreen from 'components/ChatScreen';
@@ -17,9 +18,9 @@ function App() {
 						<SignUp />
 					</Route>
 
-					<Route path='/signUp'>
+					<Route path='/signIn'>
 						<Header backButton='/' />
-						{/* <ChatScreen /> */}
+						<SignIn />
 					</Route>
 
 					{/* chat screen path */}

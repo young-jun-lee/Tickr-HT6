@@ -4,12 +4,12 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import TickrLogo from 'media/tickr_logo.png';
 
-const SignUp: React.FC = () => {
+const SignIn: React.FC = () => {
 	const [successful, setSuccessful] = useState<boolean>(false);
 	const [message, setMessage] = useState<string>('');
 
-	const register = (email: string, password: string) => {
-		return axios.post(process.env.REACT_APP_SERVER_URL + 'signUp', {
+	const logIn = (email: string, password: string) => {
+		return axios.post(process.env.REACT_APP_SERVER_URL + 'signIn', {
 			email,
 			password
 		});
@@ -28,18 +28,20 @@ const SignUp: React.FC = () => {
 			.required('This field is required!')
 	});
 
-	const handleRegister = (formValue: { email: string; password: string }) => {
+	const handleLogIn = (formValue: { email: string; password: string }) => {
 		const { email, password } = formValue;
 
-		register(email, password).then(
+		logIn(email, password).then(
 			(response: any) => {
+				console.log(response);
 				setMessage(
-					'You have successfully signed up. In a moment you will be redirected to the home page!'
+					'You have successfully logged in. In a moment you will be redirected to the home page!'
 				);
 				setSuccessful(true);
 				window.location.href = '/';
 			},
 			(error: any) => {
+				console.log(error);
 				const resMessage =
 					error.response.data || error.message || error.toString();
 
@@ -68,7 +70,7 @@ const SignUp: React.FC = () => {
 				<Formik
 					initialValues={initialValues}
 					validationSchema={validationSchema}
-					onSubmit={handleRegister}
+					onSubmit={handleLogIn}
 				>
 					<Form>
 						{!successful && (
@@ -106,7 +108,7 @@ const SignUp: React.FC = () => {
 										type='submit'
 										className='btn btn-primary btn-block'
 									>
-										Sign Up
+										Log In
 									</button>
 								</div>
 							</div>
@@ -133,4 +135,4 @@ const SignUp: React.FC = () => {
 	);
 };
 
-export default SignUp;
+export default SignIn;
