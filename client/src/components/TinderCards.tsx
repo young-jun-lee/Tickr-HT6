@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import moment, { Moment } from 'moment';
 import TinderCard from 'react-tinder-card';
 import 'styles/TinderCards.css';
 
@@ -129,6 +130,11 @@ function TinderCards() {
 		console.log('market news: ', marketNews);
 	};
 
+	const getFormattedDate = (epoch: EpochTimeStamp) => {
+		var date = new Date(epoch * 1000);
+		return date.toLocaleString();
+	};
+
 	return (
 		<div className='tinderCards'>
 			<div className='tinderCards__cardContainer'>
@@ -142,7 +148,7 @@ function TinderCards() {
 					>
 						{cardView === 1 && (
 							<div
-								className='tinderCards__card'
+								className='tinderCards__card card1'
 								onClick={(event) => changeCardView(event)}
 							>
 								<img
@@ -177,19 +183,28 @@ function TinderCards() {
 											key={story.id}
 											className='story news'
 										>
-											<img
-												alt={`${story.headline} image`}
-												src={story.image}
-											></img>
-											<a
-												href={story.url}
-												className='news'
-											>
-												<p>{story.headline}</p>
-											</a>
-											<p>{story.source}</p>
-											<p>{story.summary}</p>
-											<p>{story.datetime}</p>
+											<div classname='story title'>
+												<img
+													alt={`story`}
+													src={story.image}
+													className='story'
+												/>
+												<a
+													href={story.url}
+													className='news'
+												>
+													<p>{story.headline}</p>
+												</a>
+												<p className="story source">{story.source}</p>
+											</div>
+											<p className='story summary'>
+												{story.summary}
+											</p>
+											<p className='story date'>
+												{getFormattedDate(
+													story.datetime
+												)}
+											</p>
 										</div>
 									);
 								})}
@@ -207,19 +222,28 @@ function TinderCards() {
 											key={story.id}
 											className='story news'
 										>
-											<img
-												alt={`${story.headline} image`}
-												src={story.image}
-											></img>
-											<a
-												href={story.url}
-												className='news'
-											>
-												<p>{story.headline}</p>
-											</a>
-											<p>{story.source}</p>
-											<p>{story.summary}</p>
-											<p>{story.datetime}</p>
+											<div classname='story title'>
+												<img
+													alt={`story`}
+													src={story.image}
+													className='story'
+												/>
+												<a
+													href={story.url}
+													className='news'
+												>
+													<p>{story.headline}</p>
+												</a>
+												<p>{story.source}</p>
+											</div>
+											<p className='story summary'>
+												{story.summary}
+											</p>
+											<p className='story date'>
+												{getFormattedDate(
+													story.datetime
+												)}
+											</p>
 										</div>
 									);
 								})}

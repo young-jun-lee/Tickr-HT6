@@ -10,10 +10,6 @@
 }
 
 .tinderCards__card {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
 	position: relative;
 	width: 450px;
 	padding: 20px;
@@ -23,6 +19,13 @@
 	border-radius: 20px;
 	background-size: cover;
 	background-position: center;
+}
+
+.tinderCards__card.card1 {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
 }
 
 .companyProfile {
@@ -39,17 +42,43 @@
 .news.tinderCards__card {
 	overflow: scroll;
 }
+
 .news.story {
-	padding: 5px;
+	padding: 20px 10px;
+}
+
+.story.title {
+	flex-direction: row;
+	justify-content: center;
+	font-style: bold;
+}
+
+img.story {
+	height: 50px;
+	display: inline;
+	float: left;
+	padding: 5px 15px;
+}
+
+.story.source {
+	/*
+	color: rgb(79, 79, 79);
+	font-size: 14px; */
+	font-style: bold;
 }
 
 .news.story > * {
 	padding: 1px;
 }
 
-.news.story > img {
-	/* width: 20px; */
-	height: 40px;
+.story.summary {
+	padding: 5px;
+}
+
+.story.date {
+	padding-left: 5px;
+	color: rgb(79, 79, 79);
+	font-size: 12px;
 }
 
 a.news {
