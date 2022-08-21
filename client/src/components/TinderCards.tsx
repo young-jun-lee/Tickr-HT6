@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import TinderCard from 'react-tinder-card';
 import 'styles/TinderCards.css';
 
@@ -10,9 +11,23 @@ interface Stock {
 	marketCap: string;
 }
 
+interface CompanyNewsStory {
+	datetime: number; // 1661013000,
+	category: string; // "company",
+	headline: string; // "Things Just Got Tougher for Peloton",
+	id: number; // 115338334,
+	image: string; // "https://s.yimg.com/cv/apiv2/social/images/yahoo_default_logo-1200x1200.png",
+	related: string; // "AAPL",
+	source: string; // "Yahoo",
+	summary: string; // "How challenging Peloton Interactive's balance sheet is right now.  Why Peloton will almost certainly have to raise money.  Why Costco Wholesale is his favorite retail stock, followed closely by Home Depot.",
+	url: string; // "https://finnhub.io/api/news?id=d45e940e9209715a2fcff8d49df8596f9ad5bee27cf9d2b3ea2a83ff18c21aaf"
+}
+
 function TinderCards() {
 	const [stocks, setStocks] = useState<Stock[]>([]);
 	const [windowSize, setWindowSize] = useState(getWindowSize());
+	const [stockIndex, setStockIndex] = useState<number>(0);
+	const [companyNews, setCompanyNews] = useState<CompanyNewsStory[]>([]);
 	const [cardView, setCardView] = useState<number>(1);
 	const MAX_CARD_VIEW = 4;
 	const MIN_CARD_VIEW = 1;
@@ -36,7 +51,23 @@ function TinderCards() {
 				marketCap: 'fake market cap 2'
 			}
 		]);
+		getCompanyNews('AAPL') // HARD CODED!!
+			.then(
+				(response: any) => {
+					setCompanyNews(response.data);
+					console.log(companyNews);
+				},
+				(error: any) => {}
+			);
 	}, []);
+
+	const getCompanyNews = async (symbol: string) => {
+		return axios.get(process.env.REACT_APP_SERVER_URL + 'getCompanyNews', {
+			params: {
+				symbol: symbol
+			}
+		});
+	};
 
 	const swiped = (direction: string, nameToDelete: string) => {
 		console.log('removing:' + nameToDelete);
@@ -45,6 +76,7 @@ function TinderCards() {
 	const outOfFrame = (name: string) => {
 		console.log(name + ' left the screen!');
 		setCardView(1);
+		setStockIndex(stockIndex + 1);
 	};
 
 	function getWindowSize() {
@@ -54,15 +86,12 @@ function TinderCards() {
 
 	const changeCardView = (event: any) => {
 		setWindowSize(getWindowSize());
-		console.log(event.pageX, event.pageY);
-		console.log(windowSize.innerWidth);
 		if (event.pageX > windowSize.innerWidth / 2) {
 			if (cardView < MAX_CARD_VIEW) setCardView(cardView + 1);
-			console.log('next view: ', cardView);
 		} else {
 			if (cardView > MIN_CARD_VIEW) setCardView(cardView - 1);
-			console.log('prev view: ', cardView);
 		}
+		console.log(companyNews);
 	};
 
 	return (
@@ -110,10 +139,32 @@ function TinderCards() {
 						)}
 						{cardView === 4 && (
 							<div
-								className='tinderCards__card'
+								className='tinderCards__card company_news'
 								onClick={(event) => changeCardView(event)}
 							>
-								<p>view 4</p>
+								{companyNews.map((story) => {
+									return (
+										<div
+											key={story.id}
+											className='story company_news'
+										>
+											<img
+												alt={`${story.headling} image`}
+												src={story.image}
+											></img>
+											<a
+												href={story.url}
+												className='company_news'
+											>
+												<p>{story.headline}</p>
+											</a>
+											<p>{story.source}</p>
+											<p>{story.summary}</p>
+											<p>{story.datetime}</p>
+										</div>
+									);
+									<a>text to display!</a>;
+								})}
 							</div>
 						)}
 					</TinderCard>

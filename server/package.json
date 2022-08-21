@@ -29,6 +29,7 @@
 		"@supabase/supabase-js": "^1.35.6",
 		"cors": "^2.8.5",
 		"dotenv": "^16.0.1",
-		"finnhub": "^1.2.15"
+		"finnhub": "^1.2.15",
+		"moment": "^2.29.4"
 	}
 }
